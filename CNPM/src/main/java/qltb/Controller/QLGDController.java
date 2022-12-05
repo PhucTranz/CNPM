@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 
 import qltb.Model.DoiBong;
@@ -85,18 +84,6 @@ public class QLGDController {
 		}
 		return "redirect:/admin/quan_ly_giai_dau";	
 	}
-//	
-//	@RequestMapping("/admin/deleteGD/{id}")
-//	public String deleteAccount(@PathVariable(name = "id") int id) {
-//		try {
-//			GDService.delete(id);
-//		}catch(Exception e){
-//			success = -2;
-//			return "redirect:/admin/quan_ly_giai_dau";	
-//		}
-//		success = 2;
-//		return "redirect:/admin/quan_ly_giai_dau";	
-//	}
 	
 	//view Group stage
 	@RequestMapping("/bangdau/{id}")

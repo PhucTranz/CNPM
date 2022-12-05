@@ -7,8 +7,6 @@ import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import qltb.Service.UserDetailsServiceImpl;
  
@@ -59,15 +57,6 @@ public class WebSecurityConfig{
         	.and().csrf().disable()
         	.exceptionHandling().accessDeniedPage("/403");
         	
-//        	http.authorizeRequests().and() //
-//            .rememberMe().tokenRepository(this.persistentTokenRepository()) //
-//            .tokenValiditySeconds(1 * 24 * 60 * 60);
-        	
         return http.build();
     }
-
-//	private PersistentTokenRepository persistentTokenRepository() {
-//		InMemoryTokenRepositoryImpl memory = new InMemoryTokenRepositoryImpl(); 
-//        return memory;
-//	}
 }
