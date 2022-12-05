@@ -11,24 +11,29 @@ public class BangDau_DoiBong {
 	@EmbeddedId
 	private BD_DB_id gddb;
 	private int diem;
+	
 	public BangDau_DoiBong() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
+	
 	public BangDau_DoiBong(BD_DB_id gddb, int diem) {
 		super();
 		this.gddb = gddb;
 		this.diem = diem;
 	}
+	
 	public BD_DB_id getGddb() {
 		return gddb;
 	}
+	
 	public void setGddb(BD_DB_id gddb) {
 		this.gddb = gddb;
 	}
+	
 	public int getDiem() {
 		return diem;
 	}
+	
 	public void setDiem(int diem) {
 		this.diem = diem;
 	}

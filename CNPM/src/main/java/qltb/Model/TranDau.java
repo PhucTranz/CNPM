@@ -13,27 +13,33 @@ public class TranDau {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int maTD;
 	private int maBang;
+	
 	public TranDau() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
+	
 	public TranDau(int maTD, int maBang) {
 		super();
 		this.maTD = maTD;
 		this.maBang = maBang;
 	}
+	
 	public TranDau(int maBang) {
 		this.maBang = maBang;
 	}
+	
 	public int getMaTD() {
 		return maTD;
 	}
+	
 	public void setMaTD(int maTD) {
 		this.maTD = maTD;
 	}
+	
 	public int getMaBang() {
 		return maBang;
 	}
+	
 	public void setMaBang(int maBang) {
 		this.maBang = maBang;
 	}

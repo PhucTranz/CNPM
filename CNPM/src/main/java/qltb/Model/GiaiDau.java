@@ -12,24 +12,29 @@ public class GiaiDau {
 	private String maGD;
 	@Column(name = "ten")
 	private String tenGD;
+	
 	public GiaiDau() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
+	} 
+	
 	public GiaiDau(String maGD, String tenGD) {
 		super();
 		this.maGD = maGD;
 		this.tenGD = tenGD;
 	}
+	
 	public String getMaGD() {
 		return maGD;
 	}
+	
 	public void setMaGD(String maGD) {
 		this.maGD = maGD;
 	}
+	
 	public String getTenGD() {
 		return tenGD;
 	}
+	
 	public void setTenGD(String tenGD) {
 		this.tenGD = tenGD;
 	}

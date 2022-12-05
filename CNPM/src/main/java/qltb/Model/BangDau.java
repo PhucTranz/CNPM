@@ -17,30 +17,37 @@ public class BangDau {
 	private String tenBang;
 	@Column(name = "maGD")
 	private String maGD;
+	
 	public BangDau() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
+	
 	public BangDau(String tenBang, String maGD) {
 		super();
 		this.tenBang = tenBang;
 		this.maGD = maGD;
 	}
+	
 	public int getMaBang() {
 		return maBang;
 	}
+	
 	public void setMaBang(int maBang) {
 		this.maBang = maBang;
 	}
+	
 	public String getTenBang() {
 		return tenBang;
 	}
+	
 	public void setTenBang(String tenBang) {
 		this.tenBang = tenBang;
 	}
+	
 	public String getMaGD() {
 		return maGD;
 	}
+	
 	public void setMaGD(String maGD) {
 		this.maGD = maGD;
 	}

@@ -16,7 +16,6 @@ public class User {
    @Column(name = "id")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private int id;
-
    private String username;
    @Column(name = "PASSWORD")
    private String password;
@@ -26,7 +25,6 @@ public class User {
    
 	public User() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public User(int id, String username, String password, String role, boolean enabled) {
@@ -77,7 +75,5 @@ public class User {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
-   
 
 }

@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import qltb.Model.DoiBong;
 import qltb.Service.DoiBongService;
 
+//football team management
 @Controller
 public class QLDBController {
 	@Autowired
 	private DoiBongService DBService;
 	private int success = 0;
+	
+	//football team management page
 	@RequestMapping("admin/quan_ly_doi_bong")
-	public String viewLoginPage(Model model) {
+	public String viewTeamManagementPage(Model model) {
 		List<DoiBong> listDB = DBService.listAll();
 		model.addAttribute("listDB", listDB);
 		model.addAttribute("DoiBong", new DoiBong());
@@ -27,8 +30,9 @@ public class QLDBController {
 		return "DoiBong";
 	}
 	
+	//save the team to database
 	@RequestMapping(value = "admin/savedoibong", method = RequestMethod.POST)
-	public String saveAccount(@ModelAttribute("DoiBong") DoiBong db, Model model) {	
+	public String saveTeam(@ModelAttribute("DoiBong") DoiBong db, Model model) {	
 		try {
 			DBService.save(db);
 		}catch(Exception e){
@@ -37,8 +41,9 @@ public class QLDBController {
 		return "redirect:/admin/quan_ly_doi_bong";	
 	}
 	
+	//Delete the team
 	@RequestMapping("/admin/delete/{id}")
-	public String deleteAccount(@PathVariable(name = "id") int id) {
+	public String deleteTeam(@PathVariable(name = "id") int id) {
 		try {
 			DBService.delete(id);
 		}catch(Exception e){
@@ -49,6 +54,7 @@ public class QLDBController {
 		return "redirect:/admin/quan_ly_doi_bong";	
 	}
 	
+	//check delete?
 	private void isSuccess(Model model) {
 		if(success==-2)
 			model.addAttribute("Message", "Xóa thất bại");

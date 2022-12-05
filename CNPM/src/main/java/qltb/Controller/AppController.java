@@ -16,6 +16,7 @@ import qltb.Model.User;
 import qltb.Repository.UserRepository;
 import qltb.Service.AccountService;
 
+//Login___Log out__Register__Change password
 @Controller
 public class AppController {
 	@Autowired
@@ -24,27 +25,32 @@ public class AppController {
 	@Autowired
     private UserRepository userRepository;
 	
+	//Login page
 	@RequestMapping("/login")
 	public String viewLoginPage(Model model) {
 		return "Login";
 	}
 	
+	//Login error
 	@RequestMapping("/loginerror")
 	public String LoginError(Model model) {
 		model.addAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu");
 		return "Login";
 	}
 	
+	//Register
 	@RequestMapping("/register")
 	public String viewCreateAccountPage(Model model) {
 		model.addAttribute("user", new User());
 		return "register";
 	}
 
+	//Save account to database
 	@RequestMapping(value = "/saveaccount", method = RequestMethod.POST)
 	public String saveAccount(@ModelAttribute("user") User tk, Model model) {
 		String p="";
 		try {
+			//encode password
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			p = tk.getPassword();
 			String pass= encoder.encode(p);
@@ -60,10 +66,12 @@ public class AppController {
 		return "login";
 	}
 	
+	//Home page
 	@RequestMapping("/home")
 	public String viewHomePage(Model model) {
 		String role="";
 		try {
+			//Get User's role
 			MyUserDetails u = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			role = u.getRole();
 		}catch(Exception e) {
@@ -75,19 +83,25 @@ public class AppController {
 		return "Home";
 	}
 	
+	//Change password page
 	@RequestMapping("/changepassword")
 	public String viewChangePassPage(Model model) {
 		return "DoiMatKhau";
 	}
 	
+	//Save new password to database
 	@RequestMapping(value = "/savePassword", method = RequestMethod.POST)
 	public String savePassword(@RequestParam(name = "password") String p,@RequestParam(name = "newpassword") String np,@RequestParam(name = "cfnewpassword") String cfp, Model model) {
+		//check information
 		if(p.equals("") || np.equals("") || cfp.equals(""))
 			model.addAttribute("errorMessage", "Không được bỏ trống");
+		
 		try {
+			//get old password
 			MyUserDetails u = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			String pass = u.getPassword();
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			//Verification password
 			if(encoder.matches(p, pass)) {
 				if(np.equals(cfp)) {
 					User user = userRepository.getUserByUsername(u.getUsername());
@@ -106,10 +120,13 @@ public class AppController {
 		return "DoiMatKhau";	
 	}
 	
+	//get header
 	@RequestMapping("/header.html")
 	public String viewHeaderPage(Model model) {
 		return "header";
 	}
+	
+	//get admin's header
 	@RequestMapping("admin/header.html")
 	public String Header(Model model) {
 		return "header";

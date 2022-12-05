@@ -55,6 +55,8 @@ public class QLGDController {
 	private TDDBService tddbService;
 	
 	private int success = 0;
+	
+	//Tournament management page
 	@RequestMapping("admin/quan_ly_giai_dau")
 	public String viewQLGD(Model model) {
 		List<DoiBong> listDB = DBService.listAll();
@@ -67,8 +69,10 @@ public class QLGDController {
 		return "GiaiDau";
 	}
 	
+	//Save tournament to database
 	@RequestMapping(value = "admin/savegiaidau", method = RequestMethod.POST)
-	public String saveGiaiDau(@RequestParam(name = "doibong") Integer[] db,@RequestParam(name = "tengd") String tengd,@RequestParam(name = "magd") String magd, Model model) {
+	public String saveGiaiDau(@RequestParam(name = "doibong") Integer[] db,@RequestParam(name = "tengd") String tengd,
+			@RequestParam(name = "magd") String magd, Model model) {
 		try {
 			Collections.shuffle(Arrays.asList(db));
 			GiaiDau gd = new GiaiDau(magd,tengd);
@@ -94,16 +98,18 @@ public class QLGDController {
 //		return "redirect:/admin/quan_ly_giai_dau";	
 //	}
 	
+	//view Group stage
 	@RequestMapping("/bangdau/{id}")
 	public String viewBangDau(@PathVariable(name = "id") String id, Model model) {
 		List<BangDau> listBD = BDService.getByMaGD(id);
 	
+		//Group A,B,C,D
 		List<DoiBong_Diem> A = new ArrayList<DoiBong_Diem>();
 		List<DoiBong_Diem> B = new ArrayList<DoiBong_Diem>();
 		List<DoiBong_Diem> C = new ArrayList<DoiBong_Diem>();
 		List<DoiBong_Diem> D = new ArrayList<DoiBong_Diem>();
 		
-		
+		//get teams from database and add them to group
 		for(BangDau bd : listBD) {
 			List<BangDau_DoiBong> list = BDDBService.getByMaBang(bd.getMaBang());
 			for(BangDau_DoiBong i : list) {
@@ -119,10 +125,13 @@ public class QLGDController {
 			}
 		}
 		
+		//sort team by score
 		DoiBong_Diem.sortByScore(A);
 		DoiBong_Diem.sortByScore(B);
 		DoiBong_Diem.sortByScore(C);
 		DoiBong_Diem.sortByScore(D);
+		
+		//mapping to html file
 		model.addAttribute("BangA", A);
 		model.addAttribute("BangB", B);
 		model.addAttribute("BangC", C);
@@ -131,11 +140,12 @@ public class QLGDController {
 		model.addAttribute("bB",B.get(0).getMaBang());
 		model.addAttribute("bC",C.get(0).getMaBang());
 		model.addAttribute("bD",D.get(0).getMaBang());
-		
 		model.addAttribute("magd", id);
+		
 		return "BangDau";
 	}
 	
+	//check add and delete action
 	private void isSuccess(Model model) {
 		if(success==-1)
 			model.addAttribute("Message", "Thêm thất bại");
@@ -148,6 +158,7 @@ public class QLGDController {
 		success = 0;
 	}
 	
+	//random team to group stage
 	private void xepBangDau(Integer[] db, String maGD) {
 		BangDau A = new BangDau("Bang A",maGD);
 		BangDau B = new BangDau("Bang B",maGD);
@@ -178,12 +189,14 @@ public class QLGDController {
 		}
 	}
 	
+	//insert into trandau
 	private void tranDau(int maBang) {
 		for(int i=0;i<6;i++) {
 			TDService.save(new TranDau(maBang));
 		}
 	}
 	
+	//insert into trandau_doibong
 	private void tranDau_doiBong(String magd) {
 		List<BangDau> listBD = BDService.getByMaGD(magd);
 		for(BangDau bd : listBD) {
@@ -205,10 +218,12 @@ public class QLGDController {
 		
 	}
 	
+	//Match page
 	@RequestMapping("/trandau/{id}")
 	public String viewTranDau(@PathVariable(name = "id") int maBang, Model model) {
 		List<TranDau> listTD = TDService.getByMaBang(maBang);
 		List<TranDauDetails> list = new ArrayList<TranDauDetails>();
+		
 		for(TranDau td : listTD) {
 			List<TranDau_DoiBong> tddb = tddbService.getByMaTD(td.getMaTD());
 			int maD1 = tddb.get(0).getTddb().getMaDB();
@@ -219,9 +234,11 @@ public class QLGDController {
 			int d2=tddb.get(1).getBangthang();
 			list.add(new TranDauDetails(td.getMaTD(), maD1, maD2, tend1, tend2,d1 ,d2 ));
 		}
+		
 		model.addAttribute("listTD", list);
 		model.addAttribute("mabang", maBang);
 		
+		//get role
 		String role="";
 		try {
 			MyUserDetails u = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -229,12 +246,15 @@ public class QLGDController {
 		}catch(Exception e) {
 			;
 		}
+		
 		if(role.equals("ROLE_ADMIN")) 
 			return "TranDau";
 		model.addAttribute("role", "notAdmin");
+		
 		return "TranDau";
 	}
 	
+	//save Score to database
 	@RequestMapping(value = "admin/saveScore", method = RequestMethod.POST)
 	public String saveScore(@RequestParam(name = "bt1") Integer[] bt1, @RequestParam(name = "bt2") Integer[] bt2, 
 			@RequestParam(name = "id1") Integer[] id1, @RequestParam(name = "id2") Integer[] id2, 
@@ -263,22 +283,5 @@ public class QLGDController {
 		}
 		
 		return "redirect:/bangdau/"+BDService.get(maBD).getMaGD();	
-	}
-	
-	@RequestMapping("/tuket/{id}")
-	public String viewTuKet(@PathVariable(name = "id") int maBang, Model model) {
-		
-		
-		String role="";
-		try {
-			MyUserDetails u = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			role = u.getRole();
-		}catch(Exception e) {
-			;
-		}
-		if(role.equals("ROLE_ADMIN")) 
-			return "TranDau";
-		model.addAttribute("role", "notAdmin");
-		return "TranDau";
 	}
 }
